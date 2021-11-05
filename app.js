@@ -10,12 +10,15 @@ function addBook(event){
     const authorInput = document.querySelector('#author').value;
     const isbnInput = document.querySelector('#isbn').value;
 
+    const book = [titleInput, authorInput, isbnInput];
+    const tr = document.createElement("tr");
+
     if(titleInput === "" && authorInput === ""&& isbnInput === ""){
         event.preventDefault();
         window.alert("Väljad ei saa tühjad olla!")
     }else{
 
-        const tr = document.createElement("tr");
+
 
         const tableTitle = document.createElement("td");
         const tableAuthor = document.createElement("td");
@@ -41,6 +44,8 @@ function addBook(event){
         const tbody = document.querySelector("tbody");
         tbody.appendChild(tr);
 
+        addBookToLocalStorage(book);
+
         document.querySelector('#title').value = "";
         document.querySelector('#author').value = "";
         document.querySelector('#isbn').value = "";
@@ -54,4 +59,16 @@ function deleteBook(event){
     if(event.target.textContent === "X"){
         tbody.removeChild(event.target.parentElement.parentElement);
     }
+}
+
+function addBookToLocalStorage(book){
+    let books;
+    if(localStorage.getItem("books") === null){
+        books = [];
+    }else{
+        books = JSON.parse(localStorage.getItem('books'));
+    }
+    books.push(book);
+
+    localStorage.setItem("books", JSON.stringify(books));
 }
