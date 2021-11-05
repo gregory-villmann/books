@@ -57,7 +57,11 @@ function addBook(event){
 function deleteBook(event){
     const tbody = document.querySelector("tbody");
     if(event.target.textContent === "X"){
-        tbody.removeChild(event.target.parentElement.parentElement);
+        if(confirm("Do you want to delete this book?")){
+            let bookISBN = event.target.parentElement.previousElementSibling.textContent;
+            deleteBookFromLocalStorage(bookISBN);
+            tbody.removeChild(event.target.parentElement.parentElement);
+        }
     }
 }
 
@@ -71,4 +75,29 @@ function addBookToLocalStorage(book){
     books.push(book);
 
     localStorage.setItem("books", JSON.stringify(books));
+}
+
+function deleteBookFromLocalStorage(bookISBN){
+    let books;
+    if(localStorage.getItem('books') === null){
+        books = [];
+    } else {
+        books = JSON.parse(localStorage.getItem('books'));
+    }
+    /*
+    for(let i = 0; i < books.length; i++){
+        let book = books[i];
+        if(book[2] === bookISBN){
+            books.splice(i, 1);
+        }
+    }
+    */
+
+    books.forEach(function (book, index){
+        if(book[2] === bookISBN){
+            books.splice(index, 1);
+        }
+    });
+
+    localStorage.setItem('books', JSON.stringify(books));
 }
